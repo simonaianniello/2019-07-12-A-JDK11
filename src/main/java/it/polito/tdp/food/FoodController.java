@@ -7,6 +7,7 @@ package it.polito.tdp.food;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.food.model.Food;
 import it.polito.tdp.food.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,7 +42,7 @@ public class FoodController {
     private Button btnSimula; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxFood"
-    private ComboBox<?> boxFood; // Value injected by FXMLLoader
+    private ComboBox<Food> boxFood; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtResult"
     private TextArea txtResult; // Value injected by FXMLLoader
@@ -50,18 +51,37 @@ public class FoodController {
     void doCreaGrafo(ActionEvent event) {
     	txtResult.clear();
     	txtResult.appendText("Creazione grafo...");
+    	 try {	int n=Integer.parseInt(txtPorzioni.getText());	
+ 		if (n>0) {
+ 			this.boxFood.getItems().addAll(this.model.dammiCibo(n));
+ 			txtResult.appendText(this.model.creaGrafo(n));
+ 			
+ 		}
+ 		else {
+ 			txtResult.setText("inserisci num valido");
+ 		 	this.boxFood.setItems(null);
+ }
+    	 }
+ catch (NumberFormatException e){
+ 	txtResult.setText("inserire numero intero");
+ 	this.boxFood.setItems(null);
+ 	throw new NumberFormatException();
+ }
     }
     
     @FXML
     void doCalorie(ActionEvent event) {
     	txtResult.clear();
     	txtResult.appendText("Analisi calorie...");
+    	
+    	
     }
 
     @FXML
     void doSimula(ActionEvent event) {
     	txtResult.clear();
     	txtResult.appendText("Simulazione...");
+    	
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -77,5 +97,6 @@ public class FoodController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	
     }
 }
